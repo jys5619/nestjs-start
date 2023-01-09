@@ -248,3 +248,33 @@ const app = await NestFactory.create(AppModule);
 app.use(logger);
 await app.listen(3000);
 ```
+
+## 10.TypeORM으로 데이터 컨트롤하기 #1
+
+```bash
+# 테스트 스크마 생성
+CREATE SCHEMA test DEFAULT CHARACTER SET UTF8 COLLATE utf8_unicode_ci;
+
+# 모듈 설치
+npm install --save @nestjs/typeorm typeorm mysql2
+
+# app.module.ts @Module 설정
+# synchronize: true 운영모드에서는 사용하면 안됨.
+@Module({
+    imports: [
+        TypeOrmModule.forRoot({
+            type: 'mariadb',
+            host: '1.243.41.144',
+            port: 3307,
+            username: 'dev01',
+            password: 'MariaDB10!@',
+            database: 'test',
+            entities: [],
+            synchronize: true,
+        }),
+        UsersModule, CatsModule],
+    controllers: [AppController],
+    providers: [AppService],
+})
+export class AppModule {}
+```
