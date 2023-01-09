@@ -37,3 +37,16 @@ Root Module  <--- [User Module, Order Module, Chat Module]
 Module       <--- [Controller, Provider]
 
 Client       <--> Controller <--> Provider
+
+## 04.소스 자동 생성하기
+
+```bash
+# users 모둘 생성
+> nest g module users
+
+# users 컨트롤러 생성
+> nest g controller user
+
+# users 서비스 생성
+> nest g service users
+```
