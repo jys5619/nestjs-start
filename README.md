@@ -158,3 +158,93 @@ export class CatsController {
 
 ## 07.서비스만들기
 
+* provider는 services, repositories, factories, helpers 등이 있습니다.
+
+
+## 08.미들웨어
+
+미들웨어는 라우터 핸들러 이전에 호출되는 함수입니다.
+
+[Client Side] ----(HTTP Reuqest)----> [Middleware] --------> [Route Handler]
+
+* 모든 코드가 공통으로 실행해야 하는 인증, 로깅등을 처리할 수 있다.
+* 요청과 응답 객체를 변경할 수 있다.
+* 요청의 validation을 체크하여 오류 처리를 할 수 있다.
+
+```bash
+#################################################################
+# NestMiddleware 인터페이스를 추가한다.
+#################################################################
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+    use(req: Request, res: Response, next: NextFunction) {
+        console.log('Request...');
+        next();
+    }
+}
+
+# app.module.ts에서 configure에 추가 해주어야한다.
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { CatsModule } from './cats/cats.module';
+import { CatsController } from './cats/cats.controller';
+
+@Module({
+    imports: [CatsModule],
+})
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(LoggerMiddleware)
+            .forRoutes('cats');
+    }
+}
+
+# forRoutes에 path를 패턴 방식으로 이용하거나 메서드를 설정할 수 있다.
+.forRoutes({ path: 'ab*cd', method: RequestMethod.ALL});    // path를 패턴 방식으로 이용
+.forRoutes({ path: 'cats', method: RequestMethod.GET});    //  메서드를 설정
+.forRoutes(CatsController)    // 컨트롤러로 설정
+
+# 예외 처리
+consumer
+    .apply(LoggerMiddleware)
+    .exclude(
+        { path: 'cats', method: RequestMethod.GET },
+        { path: 'cats', method: RequestMethod.POST },
+        'cats/(.*)',
+    )
+    .forRoutes(CatsController);
+
+#################################################################
+# Functional 미들웨어
+#################################################################
+
+# logger.middleware.ts
+import { Request, Response, NextFunction } from 'express';
+
+export function loggger(req: Request, res: Response, next: NextFunction) {
+    console.log('Request...');
+    next();
+}
+
+# app.modules
+consumer
+    .apply(logger)
+    .forRoutes(CatsController);
+
+# 여러개의 미들웨어 사용
+consumer.apply(cors(), helmet(), logger).forRoutes(CatsController);
+
+#################################################################
+# Global 미들웨어 
+#################################################################
+
+# Functional 미들웨어만 사용가능하다.
+
+const app = await NestFactory.create(AppModule);
+app.use(logger);
+await app.listen(3000);
+```
