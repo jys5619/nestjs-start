@@ -32,18 +32,11 @@ $ npm run test:cov
 
 ## 03. Nestjs의 구조
 
-<<<<<<< HEAD
 Root Module  <--- [User Module, Order Module, Chat Module]
-=======
-                ┌ User Module
-Root Module  <--+ Order Module
-                └ Chat Module
->>>>>>> nestjs-start/master
 
 Module       <--- [Controller, Provider]
 
 Client       <--> Controller <--> Provider
-<<<<<<< HEAD
 
 ## 04.소스 자동 생성하기
 
@@ -57,5 +50,3 @@ Client       <--> Controller <--> Provider
 # users 서비스 생성
 > nest g service users
 ```
-=======
->>>>>>> nestjs-start/master
