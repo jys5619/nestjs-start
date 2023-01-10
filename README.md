@@ -278,3 +278,63 @@ npm install --save @nestjs/typeorm typeorm mysql2
 })
 export class AppModule {}
 ```
+
+## [번외] nestjs swagger 설치및 설정
+
+```bash
+npm install --save @nestjs/swagger swagger-ui-express
+
+# main.ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from 'src/app.module';
+import { setupSwagger } from 'src/util/swagger';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // ... 생략
+  setupSwagger(app);
+
+  await app.listen(3000);
+}
+
+void bootstrap();
+
+# src/util/swagger.ts
+import { INestApplication } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
+/**
+ * Swagger 세팅
+ *
+ * @param {INestApplication} app
+ */
+export function setupSwagger(app: INestApplication): void {
+  const options = new DocumentBuilder()
+    .setTitle('NestJS Study API Docs')
+    .setDescription('NestJS Study API description')
+    .setVersion('1.0.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-docs', app, document);
+}
+
+# 어노테이션으로 설정한다.
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
+@Controller('v1/users')
+@ApiTags('유저 API')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Post()
+  @ApiOperation({ summary: '유저 생성 API', description: '유저를 생성한다.' })
+  @ApiCreatedResponse({ description: '유저를 생성한다.', type: User })
+  async create(@Body() requestDto: UserCreateRequestDto, @Res() res: Response) {
+    const user: User = await this.userService.createUser(requestDto);
+
+    return res.status(HttpStatus.CREATED).json(user);
+  }
+}
+```

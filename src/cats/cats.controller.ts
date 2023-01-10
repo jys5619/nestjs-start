@@ -2,8 +2,10 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './CreateCatDto';
 import { Cat } from './interface/cat.interface';
+import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('cats')
+@ApiTags('CAT API')
 export class CatsController {
 
     /**
@@ -16,7 +18,7 @@ export class CatsController {
      * 전체 목록 조회
      * @returns 
      */
-    @Get()
+    @Get()  
     findAll(): Cat[] {
         return this.catsService.findAll();
     }
@@ -37,6 +39,8 @@ export class CatsController {
      * @returns 
      */
     @Post()
+    @ApiOperation({ summary: 'Cat 생성 API', description: 'Cat을 생성한다.' })
+    @ApiCreatedResponse({ description: 'Cat을 생성한다.', type: CreateCatDto })
     create(@Body() createCatDto: CreateCatDto) {
         console.log('post :', createCatDto);
         return this.catsService.create(createCatDto);
