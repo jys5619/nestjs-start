@@ -6,6 +6,7 @@ import { CatsModule } from './cats/cats.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entity/users.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { User } from './users/entity/users.entity';
             entities: [User],
             synchronize: true,
         }),
-        UsersModule, CatsModule],
+        UsersModule, CatsModule, AuthModule],
     controllers: [AppController],
     providers: [AppService],
 })
