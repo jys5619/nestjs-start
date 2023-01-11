@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { MemberDTO } from './dto/member.dto';
 import { MemberService } from './member.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -22,9 +23,9 @@ export class AuthService {
             where: { username: memberDTO.username}
         });
 
-        console.log("memberDTO ", memberDTO);
-        console.log("memberFind ", memberFind);
-        if ( !memberFind || memberDTO.password !== memberFind.password ) {
+        const validatePassword = await bcrypt.compare(memberDTO.password, memberFind.password);
+
+        if ( !memberFind || !validatePassword ) {
             throw new UnauthorizedException();
         }
 

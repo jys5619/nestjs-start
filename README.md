@@ -342,3 +342,26 @@ export class UserController {
 
 ## 12.인증 - 회원가입 #1
 
+## 13.인증 - 회원가입 #2
+
+## 14.인증 - 로그인 #1
+
+## 15.인증 - 비밀번호 암호화(bcrypt)
+
+설명 : https://npmjs.com/package/bcrypt
+
+```bash
+npm install --save bcrypt @types/bcrypt
+```
+
+```bash
+import * as bcrypt from 'bcrypt';
+
+# 패스워드 암호화
+# bcrypt.hash(암호화할문자, 솔트횟수);
+memberDTO.password = await bcrypt.hash(memberDTO.password, 10);
+
+# 패스워드 비교
+# bcrypt.compare(비암호문자, 암호문자)
+const validatePassword = await bcrypt.compare(memberDTO.password, memberFind.password);
+```
