@@ -365,3 +365,21 @@ memberDTO.password = await bcrypt.hash(memberDTO.password, 10);
 # bcrypt.compare(비암호문자, 암호문자)
 const validatePassword = await bcrypt.compare(memberDTO.password, memberFind.password);
 ```
+
+## 16.인증 - JWT 토큰 사용법과 토큰 생성하기
+
+```bash
+npm install --save @nestjs/jwt
+```
+
+
+```bash
+import { JwtModule } from '@nestjs/jwt';
+
+imports: [
+    JwtModule.register({
+        secret: 'SECRET',  // JWT 암호화 문자열
+        signOptions: { expiresIn: '300s' },  // 사용시간
+    })
+]
+```

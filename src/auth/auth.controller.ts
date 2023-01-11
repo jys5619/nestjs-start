@@ -1,4 +1,5 @@
-import { Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Param, Post, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { MemberDTO } from './dto/member.dto';
@@ -15,7 +16,9 @@ export class AuthController {
     }
 
     @Post('/login')
-    async login(@Body() memberDTO: MemberDTO): Promise<any> {
-        return await this.authService.validateMember(memberDTO);
+    async login(@Body() memberDTO: MemberDTO, @Res() res: Response): Promise<any> {
+        const jwt = await this.authService.validateMember(memberDTO);
+        res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
+        return res.json(jwt);
     }
 }

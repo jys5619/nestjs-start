@@ -4,8 +4,6 @@ import { FindOneOptions, Repository } from "typeorm";
 import { MemberDTO } from "./dto/member.dto";
 import { Member } from "./entity/member.entity";
 import * as bcrypt from 'bcrypt';
-import { userInfo } from "os";
-import { throws } from "assert";
 // import { MemberRepository } from "./entity/member.repository";
 
 @Injectable()
@@ -13,7 +11,7 @@ export class MemberService {
 
     constructor(@InjectRepository(Member) private memberRepository: Repository<Member>) {}
 
-    async findByFields(options: FindOneOptions<MemberDTO>): Promise<MemberDTO | undefined> {
+    async findByFields(options: FindOneOptions<MemberDTO>): Promise<Member | undefined> {
         return await this.memberRepository.findOne(options);
     }
 
