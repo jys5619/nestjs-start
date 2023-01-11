@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entity/users.entity';
 import { AuthModule } from './auth/auth.module';
+import { Member } from './auth/entity/member.entity';
 
 @Module({
     imports: [
@@ -17,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
             username: 'dev01',
             password: 'MariaDB10!@',
             database: 'test',
-            entities: [User],
+            entities: [User, Member],
             synchronize: true,
         }),
         UsersModule, CatsModule, AuthModule],

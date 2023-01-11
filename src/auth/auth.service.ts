@@ -4,6 +4,7 @@ import { MemberService } from './member.service';
 
 @Injectable()
 export class AuthService {
+    
     constructor(private memberService: MemberService) {}
 
     async registerMember(newMember: MemberDTO): Promise<MemberDTO> {
