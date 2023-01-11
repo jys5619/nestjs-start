@@ -35,10 +35,17 @@ export class AuthService {
             throw new UnauthorizedException();
         }
 
+        // Payload에 넣어줄 값을 설정한다.
         const payload: Payload = {id: memberFind.id, username: memberFind.username};
 
         return {
             accessToken: this.jwtService.sign(payload)
         };
+    }
+
+    async tokenValidateMember(payload: Payload): Promise<Member | undefined> {
+        return await this.memberService.findByFields({
+            where: {id: payload.id}
+        })
     }
 }

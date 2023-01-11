@@ -11,7 +11,7 @@ export class MemberService {
 
     constructor(@InjectRepository(Member) private memberRepository: Repository<Member>) {}
 
-    async findByFields(options: FindOneOptions<MemberDTO>): Promise<Member | undefined> {
+    async findByFields(options: FindOneOptions<Member>): Promise<Member | undefined> {
         return await this.memberRepository.findOne(options);
     }
 

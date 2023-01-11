@@ -383,3 +383,134 @@ imports: [
     })
 ]
 ```
+
+##  17.인증 - JWT 토큰 인증(Guard)
+
+```bash
+npm i --save @nestjs/passport @types/passport-jwt passport-jwt
+```
+
+```bash
+# payload.interface.ts
+export interface Payload {
+    id: number;
+    username: string;
+}
+```
+
+```bash
+# passport.jwt.strategy.ts
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
+import { AuthService } from '../auth.service';
+import { Payload } from './payload.interface';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+
+    constructor(private authService: AuthService) {
+        // Bearer 토큰 을 받아서 검증한다.
+        super({
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: true,
+            secretOrKey: 'SECRET_KEY'
+        })
+    }
+
+    // Payload는 위 supper에서 암호를 풀어서 나온 payload값이다.
+    // Payload 값에서 사용자 정보를 조회한다.
+    async validate(payload: Payload, done: VerifiedCallback): Promise<any> {
+        const member = await this.authService.tokenValidateMember(payload);
+        if ( !member ) {
+            return done(new UnauthorizedException({message: 'user does not exist'}), false);
+        }
+
+        // Request.member에 member값을 넣어준다. req.user 에 값이 들어간다.
+        return done(null, member);
+    }
+}
+```
+
+```bash
+# auth.service.ts
+...
+    // payload로 사용자 정보 조회
+    async tokenValidateMember(payload: Payload): Promise<Member | undefined> {
+        return await this.memberService.findByFields({
+            where: {id: payload.id}
+        })
+    }
+...
+```
+
+```bash
+# auth.guard.ts
+import { ExecutionContext, Injectable } from "@nestjs/common";
+import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
+import { Observable } from "rxjs";
+
+/**
+ * UseGuard에 넣어 주면 Request에 member값을 반환한다.
+ */
+@Injectable()
+export class AuthGuard extends NestAuthGuard('jwt') {
+    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        return super.canActivate(context);
+    }
+}
+```
+
+```bash
+# auth.controller.ts
+    @Get('/authenticate')
+    @UseGuards(AuthGuard)
+    isAuthenticated(@Req() req: Request): any {
+        const member: any = req.user;
+        return member;
+    }
+...
+```
+
+```bash
+# auth.module.ts
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([Member]),
+    JwtModule.register({
+      secret: "SECRET_KEY",
+      signOptions: {expiresIn: '300s'}
+    }),
+    PassportModule   // PassportModule 추가
+  ],
+  exports: [TypeOrmModule],
+  controllers: [AuthController],
+  providers: [AuthService, MemberService, JwtStrategy]   // JwtStrategy 추가
+})
+export class AuthModule {}
+```
+
+```bash
+# swagger에서 auth bearer 토큰 사용방법
+# swagger.ts
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'JWT',
+      description: 'Enter JWT token',
+      in: 'header',
+    },
+    'JWT-auth')    // @ApiBearerAuth('JWT-auth') 토큰이 필요한 컨트롤에서 사용
+
+# auth.controller.ts
+    @Get('/authenticate')
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth('JWT-auth')  // swagger의 option에 설정되있는 명
+    @ApiOperation({ summary: 'Jwt Auth', description: 'Jwt Auth' })
+    @ApiCreatedResponse({ description: '{"username":"coder3","password":"3333"}', type: Member })
+    isAuthenticated(@Req() req: Request): any {
+        const member: any = req.user;
+        return member;
+    }
+```
