@@ -4,13 +4,14 @@ import { PassportModule } from '@nestjs/passport/dist';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { Member } from './entity/member.entity';
 import { MemberService } from './member.service';
+import { MemberAuthorityRepository } from './repository/member-authority.repository';
+import { MemberRepository } from './repository/member.repository';
 import { JwtStrategy } from './security/passport.jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Member]),
+    TypeOrmModule.forFeature([MemberRepository, MemberAuthorityRepository]),
     JwtModule.register({
       secret: "SECRET_KEY",
       signOptions: {expiresIn: '300s'}

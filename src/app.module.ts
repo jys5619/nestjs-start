@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entity/users.entity';
 import { AuthModule } from './auth/auth.module';
 import { Member } from './auth/entity/member.entity';
+import { MemberAuthority } from './auth/entity/member-authority.entity';
 
 @Module({
     imports: [
@@ -18,8 +19,9 @@ import { Member } from './auth/entity/member.entity';
             username: 'dev01',
             password: 'MariaDB10!@',
             database: 'test',
-            entities: [User, Member],
-            synchronize: true,
+            entities: [User, Member, MemberAuthority],
+            synchronize: false,  // 테이블 자동생성 여부
+            logging: true  // query문 로그에 출력
         }),
         UsersModule, CatsModule, AuthModule],
     controllers: [AppController],

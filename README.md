@@ -514,3 +514,19 @@ export class AuthModule {}
         return member;
     }
 ```
+
+## 18.인증 - 권한관리(RoleGuard) #1
+
+[MEMBER](1)--------------(N)[MEMBER_AUTHORITY]
+
+```bash
+CREATE TABLE IF NOT EXISTS test.member_authority (
+    id INT NOT NULL AUTO_INCREMENT,
+    member_id INT NOT NULL,
+    authority_name ENUM('ROLE_USER', 'ROLE_ADMIN') NOT NULL,
+    PRIMARY KEY (id)
+)
+ENGINE = InnoDB
+```
+
+member-authority repository 추가
