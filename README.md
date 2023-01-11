@@ -530,3 +530,5 @@ ENGINE = InnoDB
 ```
 
 member-authority repository 추가
+
+## 19.인증 - 권한관리(RoleGuard) #2
