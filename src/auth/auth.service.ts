@@ -21,6 +21,7 @@ export class AuthService {
         if ( memberFind ) {
             throw new HttpException('Username aleady used!', HttpStatus.BAD_REQUEST);
         }
+        console.log(333);
         return await this.memberService.save(newMember);
     }
 

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { MemberAuthority } from "./member-authority.entity";
 
-@Entity()
+@Entity('member')
 export class Member {
     @PrimaryGeneratedColumn()
     id: number;

@@ -9,7 +9,7 @@ import { MemberRepository } from "./repository/member.repository";
 @Injectable()
 export class MemberService {
 
-    constructor(@InjectRepository(MemberRepository) private memberRepository: MemberRepository) {}
+    constructor(private memberRepository: MemberRepository) {}
 
     async findByFields(options: FindOneOptions<Member>): Promise<Member | undefined> {
         return await this.memberRepository.findOne(options);
