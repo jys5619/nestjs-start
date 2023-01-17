@@ -16,9 +16,7 @@ export class MemberService {
     }
 
     async save(memberDTO: MemberDTO): Promise<MemberDTO | undefined> {
-        console.log("memberDTO ", memberDTO);
         await this.transformPassword(memberDTO);
-        console.log("memberDTO ", memberDTO);
         return await this.memberRepository.save<MemberDTO>(memberDTO);
     }
 
