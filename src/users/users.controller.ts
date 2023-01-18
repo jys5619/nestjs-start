@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Delete, Param, Put } from '@nestjs/common';
-import { User } from './entity/users.entity';
+import { User } from '../domain/users.entity';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
 

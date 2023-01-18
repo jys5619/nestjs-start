@@ -3,7 +3,7 @@ import { MemberDTO } from './dto/member.dto';
 import { MemberService } from './member.service';
 import * as bcrypt from 'bcrypt';
 import { Payload } from './security/payload.interface';
-import { Member } from './entity/member.entity';
+import { Member } from '../domain/member.entity';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

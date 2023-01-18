@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { FindOneOptions, Repository } from "typeorm";
 import { MemberDTO } from "./dto/member.dto";
-import { Member } from "./entity/member.entity";
+import { Member } from "../domain/member.entity";
 import * as bcrypt from 'bcrypt';
 import { MemberRepository } from "./repository/member.repository";
 

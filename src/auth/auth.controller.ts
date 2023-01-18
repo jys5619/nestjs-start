@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } fro
 import { AuthService } from './auth.service';
 import { MemberDTO } from './dto/member.dto';
 import { AuthGuard } from './security/auth.guard';
-import { Member } from './entity/member.entity';
+import { Member } from '../domain/member.entity';
 import { RolesGuard } from './security/roles.guard';
 import { Roles } from './decorator/role.decorator';
 import { RoleType } from './role-type';

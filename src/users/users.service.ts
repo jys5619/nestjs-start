@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { throws } from 'assert';
-import { DeleteResult, getConnection, Repository, UpdateResult } from 'typeorm';
-import { User } from './entity/users.entity';
+import { DeleteResult, Repository } from 'typeorm';
+import { User } from '../domain/users.entity';
 
 @Injectable()
 export class UsersService {

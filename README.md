@@ -536,3 +536,5 @@ member-authority repository 추가
 ## 20.인증 - 권한관리(RoleGuard) #3
 
 ## 21.인증 - 권한관리(RoleGuard) #4
+
+## 22.TypeORM 설정 파일 분리
