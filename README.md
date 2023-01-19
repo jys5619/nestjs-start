@@ -548,3 +548,14 @@ npm i class-transformer
 ```bash
 https://github.com/typestack/class-validator#manual-validation
 ```
+
+## 24.쿠키다루기(JWT토큰)
+
+- res.cookie를 이용해서 jwt토큰 값을 전달합니다.
+- res.cookie의 인자는 (key, value, option)으로 구성됩니다.
+- option에는 httpOnly는 브라우저에서 cookie를 이용할 수 없게 합니다. 따라서 XXS 등의 보안을 강화시킬 수 있습니다.
+- maxAge는 쿠키의 유효기간을 설정할 수 있습니다.
+
+```bash
+npm i cookie-parser @types/cookie-parser
+```

@@ -30,7 +30,13 @@ export class AuthController {
     async login(@Body() memberDTO: MemberDTO, @Res() res: Response): Promise<any> {
         const jwt = await this.authService.validateMember(memberDTO);
         res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
-        return res.json(jwt);
+        // cookie값을 등록한다.
+        res.cookie('jwt', jwt.accessToken, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 *1000
+        })
+        return res.send({message: 'success'});
+        // return res.json(jwt);
     }
 
     @Get('/authenticate')
@@ -50,5 +56,21 @@ export class AuthController {
         console.log(req.user);
         const user: any = req.user;
         return user;
+    }
+
+    @Get('/cookies')
+    @ApiBearerAuth('cookies set')  // swagger의 option에 설정되있는 명
+    getCookies(@Req() req: Request, @Res() res: Response): any {
+        // cookie값을 가져온다.
+        const jwt = req.cookies['jwt'];
+        return res.send(jwt);
+    }
+
+    @Post('/logout')
+    @ApiBearerAuth('cookies remove')  // swagger의 option에 설정되있는 명
+    logout(@Res() res: Response): any {
+        // cookie값을 삭제한다.
+        res.cookie('jwt', '', {maxAge: 0});
+        return res.send({message: 'logout success'});
     }
 }
