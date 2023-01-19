@@ -538,3 +538,13 @@ member-authority repository 추가
 ## 21.인증 - 권한관리(RoleGuard) #4
 
 ## 22.TypeORM 설정 파일 분리
+
+## 23.파라메터 Null 체크 - ValidationPipe
+```bash
+npm i --save class-validator
+npm i class-transformer
+```
+
+```bash
+https://github.com/typestack/class-validator#manual-validation
+```

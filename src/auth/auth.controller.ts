@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
@@ -16,9 +16,10 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('/register')
+    @UsePipes(ValidationPipe)
     @ApiOperation({ summary: 'Member register API', description: 'Member register' })
     @ApiCreatedResponse({ description: '{"username":"coder1","password":"1111"}', type: Member })
-    async register(@Req() req: Request, @Body() memberDTO: MemberDTO): Promise<any> {
+    async register(@Body() memberDTO: MemberDTO): Promise<any> {
         return await this.authService.registerMember(memberDTO);
     }
 
