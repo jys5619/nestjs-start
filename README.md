@@ -559,3 +559,40 @@ https://github.com/typestack/class-validator#manual-validation
 ```bash
 npm i cookie-parser @types/cookie-parser
 ```
+
+## 25.환경설정 파일(개발/운영 분리)
+
+```bash
+npm i @nestjs/config
+```
+
+개발과 운영을 다르게 설치하기 위해 yaml을 설치한다.
+```bash
+npm -i js-yaml @types/js-yaml
+```
+
+yaml 파일은 build할때 복사가 되지 않으므로 build폴더로 복사를 해주어야 한다.
+아래 패키지를 설치하고 pakcage.json 파일을 수정한다.
+```bash
+npm i cpx
+```
+
+"script": {
+    "copy-files": "cpx \"src/config/*.yaml\" dist/config",
+    "build": "npm run copy-files && nest build",
+    "start": "npm run copy-files && nest build && nest start",
+    "start:dev", "start:debug", "start:prod"에도 넣어준다.
+    ...
+}
+
+* 위의 방법으로 하면 파일 복사 후 dist 폴더가 삭제되고 컴파일 되면서 다시 생성된다 그래서 복사된 파일이 삭제처리된다.
+* 해결방법은 nest-cli.json 파일을 수정하는방법이다.
+```json
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "assets": ["**/*.yaml"]
+  }
+}
+```

@@ -10,9 +10,15 @@ import { AuthModule } from './auth/auth.module';
 import { Member } from './domain/member.entity';
 import { MemberAuthority } from './domain/member-authority.entity';
 import { ormConfig } from './orm.config';
+import { ConfigModule } from '@nestjs/config';
+import config from './config/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            load: [config],
+            isGlobal: true
+        }),
         TypeOrmModule.forRootAsync({useFactory: ormConfig}),
         UsersModule, CatsModule, AuthModule],
     controllers: [AppController],
